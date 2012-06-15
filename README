@@ -1,0 +1,6 @@
+Implementation of Fuzzy State Machine (FuSM) in ActionScript 3.0 for creating game AI/bot/agent.
+
+It's a state machine that can run several states at the same time.
+Unlike FSM, because of the machine can run more than one states at the same time, FuSM doesn't have any transition.
+A state in FuSM use a Degree of Membership or DOM (I borrow the term from Fuzzy Logic), a value thats hold the degree of state activation. 
+DOM value is a Number between 0.0 and 1.0. 0.0 if state is inactive, and 1.0 if the state is fully activated.
