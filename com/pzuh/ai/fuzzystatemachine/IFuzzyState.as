@@ -5,7 +5,7 @@ package com.pzuh.ai.fuzzystatemachine
 		function enter():void
 		function update():void
 		function exit():void
-		function getDOM():Number
+		function getDOA():Number
 		function removeSelf():void
 	}	
 }

@@ -24,7 +24,7 @@ package com.pzuh.ai.fuzzystatemachine
 		
 		public function isActive(state:IFuzzyState):Boolean
 		{
-			if (state.getDOM() > 0)
+			if (state.getDOA() > 0)
 			{
 				return true;
 			}
@@ -32,32 +32,32 @@ package com.pzuh.ai.fuzzystatemachine
 			return false;
 		}
 		
-		/* calculate the average of Degree of Membership (DOM) for each states
+		/* calculate the average of Degree of Activation (DOA) for each states
 		 * make sure the value is always between 0.0 and 1.0
 		 * */		
-		private function getAverageDOM():Number
+		private function getAverageDOA():Number
 		{
 			var stateCount:int = stateArray.length;
-			var DOM:Number = 0;
-			var totalDOM:Number = 0;
+			var DOA:Number = 0;
+			var totalDOA:Number = 0;
 			
 			for (var i:int = 0; i < stateCount; i++)
 			{
-				DOM = stateArray[i].getDOM();
+				DOA = stateArray[i].getDOA();
 				
-				if (DOM < 0)
+				if (DOA < 0)
 				{
-					DOM = 0;
+					DOA = 0;
 				}
-				else if (DOM > 1)
+				else if (DOA > 1)
 				{
-					DOM = 1;
+					DOA = 1;
 				}
 				
-				totalDOM += DOM;
+				totalDOA += DOA;
 			}
 			
-			return totalDOM / stateCount;
+			return totalDOA / stateCount;
 		}
 		
 		public function update():void
@@ -69,15 +69,15 @@ package com.pzuh.ai.fuzzystatemachine
 			
 			var nonActiveStates:Array = new Array();
 			
-			/* check each state's DOM
-			 * if it greater than average DOM, add it to active states gtoup
+			/* check each state's DOA
+			 * if it greater than average DOA, add it to active states gtoup
 			 * also check whether it's already in active states group or not, 
 			 * so we can call the enter() method for newly added state
 			 * */
 			var length:int = stateArray.length;
 			for (var i:int = 0; i < length; i++)
 			{
-				if (stateArray[i].getDOM() > getAverageDOM())
+				if (stateArray[i].getDOA() > getAverageDOA())
 				{
 					if (!Basic.isElementOfArray(activeStates, stateArray[i])) 
 					{
@@ -90,9 +90,8 @@ package com.pzuh.ai.fuzzystatemachine
 					if (Basic.isElementOfArray(activeStates, stateArray[i]))
 					{
 						activeStates.splice(activeStates.indexOf(stateArray[i]), 1);
+						nonActiveStates.push(stateArray[i]);
 					}
-					
-					nonActiveStates.push(stateArray[i]);
 				}
 			}
 			
