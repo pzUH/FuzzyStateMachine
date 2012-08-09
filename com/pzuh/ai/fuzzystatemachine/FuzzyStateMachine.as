@@ -12,17 +12,18 @@ package com.pzuh.ai.fuzzystatemachine
 			
 		}		
 		
-		public function addState(state:IFuzzyState):void
+		public function addState(...rest):void
 		{
-			if (Basic.isElementOfArray(stateArray, state))
+			for (var i:int = 0; i < rest.length; i++)
 			{
-				return;
+				if (stateArray.indexOf(rest[i]) == -1)
+				{
+					stateArray.push(rest[i]);
+				}
 			}
-			
-			stateArray.push(state);
 		}
 		
-		public function isActive(state:IFuzzyState):Boolean
+		public function isActive(state:BaseFuSMState):Boolean
 		{
 			if (state.getDOA() > 0)
 			{

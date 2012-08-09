@@ -7,6 +7,7 @@
 */
 package
 {
+	import com.pzuh.utils.NameGenerator;
 	import flash.display.*;
 	import flash.events.*;
 	
@@ -20,7 +21,7 @@ package
 	public class Main extends Sprite 
 	{
 		private var vehicleArray:Array = new Array();
-		private var vehicleNum:int = 3;
+		private var vehicleNum:int = 5;
 		
 		private var bulletArray:Array = new Array();
 		
@@ -68,7 +69,7 @@ package
 			}
 			
 			addEventListener(Event.ENTER_FRAME, update, false, 0, true);
-		}		
+		}
 		
 		private function update(event:Event):void
 		{

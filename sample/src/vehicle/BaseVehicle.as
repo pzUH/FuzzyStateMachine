@@ -1,6 +1,7 @@
 package vehicle 
 {
 	import bullet.BaseBullet;
+	import com.pzuh.ai.fuzzystatemachine.BaseFuSMState;
 	import com.pzuh.ai.fuzzystatemachine.FuzzyStateMachine;
 	import com.pzuh.ai.fuzzystatemachine.IFuzzyState;
 	import flash.display.*;
@@ -50,6 +51,11 @@ package vehicle
 		
 		private var myMainClass:Main;
 		
+		public static const APPROACH_STATE:String = "approach_state";
+		public static const WANDER_STATE:String = "wander_state";
+		public static const EVADE_STATE:String = "evade_state";
+		public static const ATTACK_STATE:String = "attack_state";
+		
 		public function BaseVehicle(name:String, color:uint, mainClass:Main) 
 		{
 			position = new Vector2D();
@@ -66,10 +72,18 @@ package vehicle
 			draw();
 			
 			myFuSM = new FuzzyStateMachine();
-			myFuSM.addState(new ApproachState(this));
-			myFuSM.addState(new EvadeState(this));
-			myFuSM.addState(new WanderState(this));
-			myFuSM.addState(new AttackState(this));
+			
+			//with concrete states
+			var approachState:BaseFuSMState = new ApproachState(this, APPROACH_STATE);
+			var attackState:BaseFuSMState = new AttackState(this, ATTACK_STATE);
+			var evadeState:BaseFuSMState = new EvadeState(this, EVADE_STATE);
+			
+			//without concrete states
+			var wanderState:BaseFuSMState = new BaseFuSMState(this, WANDER_STATE);
+			wanderState.addAction(wander);
+			wanderState.addDOACalculator(calculateWanderDOA);
+			
+			myFuSM.addState(approachState, evadeState, attackState, wanderState);
 			
 			fireTimer = new Timer(500, 0);
 			fireTimer.addEventListener(TimerEvent.TIMER, fireTimerHandler, false, 0, true);
@@ -113,9 +127,21 @@ package vehicle
 		}
 		
 		//wander
-		public function wander():void
+		private function wander():void
 		{
+			trace(getName() + " wandering");
+			
 			mySteering.wander();
+		}
+		
+		private function calculateWanderDOA():Number
+		{
+			if (!hasTarget() && !hasThreat())
+			{
+				return 1;
+			}
+			
+			return 0;
 		}
 		
 		//approach

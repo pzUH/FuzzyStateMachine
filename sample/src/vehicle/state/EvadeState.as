@@ -1,55 +1,36 @@
 package vehicle.state 
 {
-	import com.pzuh.ai.fuzzystatemachine.IFuzzyState;
+	import com.pzuh.ai.fuzzystatemachine.BaseFuSMState;
 	import com.pzuh.Basic;
 	import vehicle.BaseVehicle;
 	
-	public class EvadeState implements IFuzzyState 
+	public class EvadeState extends BaseFuSMState
 	{
-		private var myShip:BaseVehicle;
-		
-		public function EvadeState(ship:BaseVehicle) 
+		public function EvadeState(ship:BaseVehicle, name:String) 
 		{
-			myShip = ship;
+			super(ship, name);
 		}
 		
-		/* INTERFACE com.pzuh.ai.fuzzystatemachine.IFuzzyState */
-		
-		public function enter():void 
+		override public function update():void 
 		{
+			trace(entity.getName() + " evading threat");
 			
-		}
-		
-		public function update():void 
-		{
-			trace(myShip.getName() + " evading threat");
+			entity.evade();
 			
-			myShip.evade();
-			
-			if (!myShip.isInEvadeRadius())
+			if (!entity.isInEvadeRadius())
 			{
-				myShip.removeThreat();
+				entity.removeThreat();
 			}
 		}
 		
-		public function exit():void 
+		override public function getDOA():Number 
 		{
-			
-		}
-		
-		public function getDOM():Number 
-		{
-			if (myShip.hasThreat())
+			if (entity.hasThreat())
 			{
 				return 1;
 			}
 			
 			return 0;
-		}
-		
-		public function removeSelf():void 
-		{
-			
-		}		
+		}	
 	}
 }
